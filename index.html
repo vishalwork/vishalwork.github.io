@@ -1,656 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Smart Translate — Flutter Package</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <title>Vishal — Flutter Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #060810;
-      --surface: #0d1117;
-      --border: rgba(255,255,255,0.07);
-      --accent: #00e5ff;
-      --accent2: #7b61ff;
-      --accent3: #ff6b6b;
-      --text: #f0f4ff;
-      --muted: #6b7694;
-      --card: rgba(255,255,255,0.03);
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --border: rgba(255,255,255,0.06);
+      --accent: #64ffda;
+      --accent2: #ff6584;
+      --accent3: #ffd166;
+      --text: #e8eaf6;
+      --muted: #5c6080;
+      --card: rgba(255,255,255,0.025);
+      --glow: rgba(100,255,218,0.12);
     }
-
     html { scroll-behavior: smooth; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      overflow-x: hidden;
-      cursor: none;
+      background: var(--bg); color: var(--text);
+      font-family: 'Cabinet Grotesk', sans-serif;
+      overflow-x: hidden; min-height: 100vh;
     }
-
-    /* Custom cursor */
-    .cursor {
-      width: 12px; height: 12px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.15s ease;
-      mix-blend-mode: screen;
+    .bg-mesh {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(100,255,218,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 80%, rgba(255,101,132,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 60% 30%, rgba(255,209,102,0.04) 0%, transparent 60%);
     }
-    .cursor-ring {
-      width: 36px; height: 36px;
-      border: 1px solid rgba(0,229,255,0.4);
-      border-radius: 50%;
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 9998;
-      transition: all 0.1s ease;
+    .bg-dots {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
     }
-
-    /* Noise overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.4;
-    }
-
-    /* Grid background */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── NAV ── */
+    .container { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 0 32px; }
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 20px 40px;
-      display: flex; align-items: center; justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 0; backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(20px);
-      background: rgba(6,8,16,0.8);
+      background: rgba(10,10,15,0.85);
     }
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.1rem;
-      letter-spacing: -0.02em;
-      color: var(--accent);
-    }
-    .nav-logo span { color: var(--text); }
-    .nav-badge {
-      font-size: 0.65rem;
-      padding: 4px 10px;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      border-radius: 20px;
-      letter-spacing: 0.1em;
-    }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--accent); }
-
-    /* ── HERO ── */
+    .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: -0.02em; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { padding: 8px 18px; border: 1px solid var(--accent); color: var(--accent) !important; border-radius: 6px; transition: background 0.2s !important; }
+    .nav-cta:hover { background: var(--glow) !important; }
     .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 120px 40px 80px;
-      z-index: 2;
-      text-align: center;
+      padding: 140px 0 80px;
+      display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center;
     }
-
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
-    .orb1 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(0,229,255,0.15), transparent 70%);
-      top: 10%; left: 50%; transform: translateX(-50%);
-      animation: pulse 4s ease-in-out infinite;
-    }
-    .orb2 {
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(123,97,255,0.2), transparent 70%);
-      top: 30%; left: 15%;
-      animation: pulse 6s ease-in-out infinite reverse;
-    }
-    .orb3 {
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, rgba(255,107,107,0.15), transparent 70%);
-      top: 20%; right: 10%;
-      animation: pulse 5s ease-in-out infinite 1s;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    .hero-inner { position: relative; max-width: 800px; }
-
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      border: 1px solid rgba(0,229,255,0.2);
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 32px;
-      background: rgba(0,229,255,0.05);
-      animation: fadeUp 0.8s ease both;
+      font-size: 0.72rem; letter-spacing: 0.15em; color: var(--accent);
+      margin-bottom: 24px; opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards;
     }
-    .hero-tag::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: blink 1.5s ease-in-out infinite;
+    .hero-tag::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+    .hero-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 8px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-    h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-      animation: fadeUp 0.8s ease 0.1s both;
+    .hero-role {
+      font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 300;
+      color: var(--muted); margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards;
     }
-    h1 .line1 { display: block; color: var(--text); }
-    h1 .line2 {
-      display: block;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hero-role span { color: var(--accent2); font-weight: 500; }
+    .hero-bio {
+      font-size: 0.92rem; color: var(--muted); line-height: 1.85;
+      max-width: 480px; margin-bottom: 36px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.4s forwards;
     }
-
-    .hero-desc {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 520px;
-      margin: 0 auto 40px;
-      animation: fadeUp 0.8s ease 0.2s both;
-    }
-
-    .hero-actions {
-      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-      animation: fadeUp 0.8s ease 0.3s both;
-    }
-
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
+      padding: 12px 24px; border-radius: 8px;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      text-decoration: none; transition: all 0.25s ease;
     }
-    .btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .btn:hover::before { opacity: 1; }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      font-weight: 600;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0,229,255,0.35);
-    }
-
-    .btn-ghost {
-      border: 1px solid var(--border);
-      color: var(--muted);
-      background: var(--card);
-    }
-    .btn-ghost:hover {
-      border-color: rgba(255,255,255,0.15);
-      color: var(--text);
-      transform: translateY(-2px);
-    }
-
-    /* ── STATS ── */
-    .stats {
-      position: relative; z-index: 2;
-      display: flex; justify-content: center; gap: 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--card);
-      animation: fadeUp 0.8s ease 0.4s both;
-    }
-    .stat {
-      flex: 1; max-width: 200px;
-      padding: 32px 24px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-value {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--accent);
-      display: block;
-    }
-    .stat-label {
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-top: 4px;
-      display: block;
-    }
-
-    /* ── INSTALL ── */
-    .install-section {
-      position: relative; z-index: 2;
-      padding: 80px 40px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .section-label {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--accent2);
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 40px;
-    }
-
-    .code-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 16px;
+    .btn-accent { background: var(--accent); color: var(--bg); }
+    .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(100,255,218,0.3); }
+    .btn-outline { border: 1px solid var(--border); color: var(--muted); background: var(--card); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.15); color: var(--text); transform: translateY(-2px); }
+    .hero-avatar { opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards; }
+    .avatar-ring {
+      width: 160px; height: 160px; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       position: relative;
     }
-    .code-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
+    .avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 3.5rem; font-weight: 700; color: var(--accent);
+      border: 3px solid var(--bg);
     }
-    .code-dots { display: flex; gap: 6px; }
-    .dot {
-      width: 10px; height: 10px; border-radius: 50%;
+    .avatar-badge {
+      position: absolute; bottom: 8px; right: 0;
+      background: var(--accent3); color: var(--bg);
+      font-size: 0.6rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 20px; letter-spacing: 0.08em;
     }
-    .dot-r { background: #ff5f57; }
-    .dot-y { background: #ffbd2e; }
-    .dot-g { background: #28ca41; }
-    .code-filename { font-size: 0.72rem; color: var(--muted); }
-    .copy-btn {
-      font-size: 0.68rem;
-      color: var(--muted);
-      background: none;
-      border: 1px solid var(--border);
-      padding: 4px 12px;
-      border-radius: 4px;
-      cursor: none;
-      transition: all 0.2s;
-      font-family: 'DM Mono', monospace;
+    .stats-row {
+      display: flex; border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; margin-bottom: 80px; background: var(--card);
+      opacity: 0; animation: fadeUp 0.7s ease 0.6s forwards;
     }
-    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
-    .code-body {
-      padding: 20px 24px;
-      font-size: 0.85rem;
-      line-height: 1.8;
-      overflow-x: auto;
+    .stat-item {
+      flex: 1; padding: 24px 20px; text-align: center;
+      border-right: 1px solid var(--border); transition: background 0.2s;
     }
-    .code-body .kw { color: var(--accent2); }
-    .code-body .str { color: #a8ff78; }
-    .code-body .cm { color: var(--muted); font-style: italic; }
-    .code-body .fn { color: var(--accent); }
-    .code-body .num { color: var(--accent3); }
-
-    /* ── FEATURES ── */
-    .features-section {
-      position: relative; z-index: 2;
-      padding: 40px 40px 80px;
-      max-width: 900px;
-      margin: 0 auto;
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: rgba(100,255,218,0.04); }
+    .stat-num { font-family: 'Clash Display', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--accent); display: block; }
+    .stat-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; margin-top: 4px; display: block; }
+    .section { margin-bottom: 80px; }
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .section-num { font-family: 'Clash Display', sans-serif; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; }
+    .section-title { font-family: 'Clash Display', sans-serif; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .package-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 32px; transition: all 0.3s ease; position: relative; overflow: hidden;
+      text-decoration: none; display: block; color: inherit;
     }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 40px;
+    .package-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
     }
-    .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+    .package-card:hover { border-color: rgba(100,255,218,0.15); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .package-card:hover::before { transform: scaleX(1); }
+    .pkg-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+    .pkg-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(100,255,218,0.15), rgba(100,255,218,0.05));
+      border: 1px solid rgba(100,255,218,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
     }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(0,229,255,0.05), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+    .pkg-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge { font-size: 0.62rem; padding: 4px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 0.05em; }
+    .badge-green { background: rgba(100,255,218,0.1); color: var(--accent); border: 1px solid rgba(100,255,218,0.2); }
+    .badge-pink { background: rgba(255,101,132,0.1); color: var(--accent2); border: 1px solid rgba(255,101,132,0.2); }
+    .badge-yellow { background: rgba(255,209,102,0.1); color: var(--accent3); border: 1px solid rgba(255,209,102,0.2); }
+    .pkg-name { font-family: 'Clash Display', sans-serif; font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .pkg-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+    .pkg-features { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .pkg-feature { font-size: 0.7rem; padding: 4px 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 4px; color: var(--muted); }
+    .pkg-stats { display: flex; gap: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .pkg-stat { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
+    .coming-soon {
+      margin-top: 12px; padding: 24px 32px;
+      border: 1px dashed var(--border); border-radius: 16px;
+      text-align: center; color: var(--muted); font-size: 0.82rem;
     }
-    .feature-card:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-4px); }
-    .feature-card:hover::before { opacity: 1; }
-
-    .feature-icon {
-      font-size: 1.8rem;
-      margin-bottom: 16px;
-      display: block;
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .skill-item {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; text-align: center; transition: all 0.2s;
     }
-    .feature-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .skill-item:hover { border-color: rgba(100,255,218,0.2); background: rgba(100,255,218,0.04); transform: translateY(-2px); }
+    .skill-emoji { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+    .skill-name { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 24px; display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: inherit; transition: all 0.2s;
     }
-    .feature-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 2;
-      border-top: 1px solid var(--border);
-      padding: 32px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-left { font-size: 0.75rem; color: var(--muted); }
-    .footer-left span { color: var(--accent); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a {
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--accent); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── SCROLLBAR ── */
+    .contact-card:hover { border-color: rgba(100,255,218,0.2); transform: translateY(-2px); }
+    .contact-icon { font-size: 1.3rem; }
+    .contact-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 2px; }
+    .contact-value { font-size: 0.85rem; font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; }
+    footer p { font-size: 0.75rem; color: var(--muted); }
+    footer span { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
-
-    @media (max-width: 600px) {
-      nav { padding: 16px 20px; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    @media (max-width: 680px) {
+      .hero { grid-template-columns: 1fr; padding: 120px 0 60px; }
+      .hero-avatar { order: -1; }
+      .avatar-ring { width: 100px; height: 100px; }
+      .avatar-inner { font-size: 2.2rem; }
       .nav-links { display: none; }
-      .hero { padding: 100px 20px 60px; }
-      .stats { flex-wrap: wrap; }
-      .stat { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
-      .install-section, .features-section { padding: 40px 20px; }
-      footer { flex-direction: column; text-align: center; }
+      .stats-row { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; }
+      .container { padding: 0 20px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+<div class="bg-mesh"></div>
+<div class="bg-dots"></div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">ai_smart<span>_translate</span></div>
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">KVishal</div>
     <div class="nav-links">
-      <a href="#install">Install</a>
-      <a href="#features">Features</a>
-      <a href="https://pub.dev/packages/ai_smart_translate" target="_blank">pub.dev</a>
-      <a href="https://github.com/vishalwork/ai_smart_translate" target="_blank">GitHub</a>
-    </div>
-    <div class="nav-badge">FLUTTER PACKAGE</div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-orb orb1"></div>
-    <div class="hero-orb orb2"></div>
-    <div class="hero-orb orb3"></div>
-
-    <div class="hero-inner">
-      <div class="hero-tag">Open Source · pub.dev · MIT License</div>
-      <h1>
-        <span class="line1">Translate Smarter,</span>
-        <span class="line2">Not Harder.</span>
-      </h1>
-      <p class="hero-desc">
-        A Flutter package that combines Google Translate with AI-powered improvements —
-        delivering natural, context-aware translations across 100+ languages.
-      </p>
-      <div class="hero-actions">
-        <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="btn btn-primary">
-          ↗ View on pub.dev
-        </a>
-        <a href="https://github.com/vishalwork/ai_smart_translate" target="_blank" class="btn btn-ghost">
-          ⌥ GitHub Repository
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <span class="stat-value">100+</span>
-      <span class="stat-label">LANGUAGES</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">AI</span>
-      <span class="stat-label">POWERED</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">FREE</span>
-      <span class="stat-label">OPEN SOURCE</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">MIT</span>
-      <span class="stat-label">LICENSE</span>
+      <a href="#packages">Packages</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <a href="https://github.com/vishalwork" target="_blank" class="nav-cta">GitHub ↗</a>
     </div>
   </div>
+</nav>
 
-  <!-- INSTALL -->
-  <section class="install-section" id="install">
-    <div class="section-label">// GET STARTED</div>
-    <h2 class="section-title">Install in seconds.</h2>
+<div class="container">
 
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots">
-          <div class="dot dot-r"></div>
-          <div class="dot dot-y"></div>
-          <div class="dot dot-g"></div>
-        </div>
-        <span class="code-filename">pubspec.yaml</span>
-        <button class="copy-btn" onclick="copyCode(this, 'dep')">copy</button>
-      </div>
-      <div class="code-body" id="dep">
-<span class="kw">dependencies</span>:
-  <span class="fn">ai_smart_translate</span>: <span class="str">^0.0.3</span>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">FLUTTER DEVELOPER</div>
+      <h1 class="hero-name">Vishal</h1>
+      <p class="hero-role">Building <span>open-source</span> Flutter packages</p>
+      <p class="hero-bio">
+        Passionate Flutter developer crafting high-quality, production-ready packages
+        for the Dart ecosystem. I build tools that make developers' lives easier —
+        from smart translation to AI-powered utilities.
+      </p>
+      <div class="hero-actions">
+        <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="btn btn-accent">↗ View on pub.dev</a>
+        <a href="https://github.com/vishalwork" target="_blank" class="btn btn-outline">⌥ GitHub Profile</a>
+         <a href="https://www.linkedin.com/in/kvishalwork21/" target="_blank" class=" btn-outline ">  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+  <path fill="#0a66c2" d="M34 2.5v29a2.5 2.5 0 0 1-2.5 2.5h-29A2.5 2.5 0 0 1 0 31.5v-29A2.5 2.5 0 0 1 2.5 0h29A2.5 2.5 0 0 1 34 2.5M10 13H5v16h5zm.45-5.5a2.88 2.88 0 0 0-2.86-2.9H7.5a2.9 2.9 0 0 0 0 5.8 2.88 2.88 0 0 0 2.95-2.81zM29 19.28c0-4.81-3.06-6.68-6.1-6.68a5.7 5.7 0 0 0-5.06 2.58h-.14V13H13v16h5v-8.51a3.32 3.32 0 0 1 3-3.58h.19c1.59 0 2.77 1 2.77 3.52V29h5z"/>
+</svg> </a>
+         
       </div>
     </div>
-
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots">
-          <div class="dot dot-r"></div>
-          <div class="dot dot-y"></div>
-          <div class="dot dot-g"></div>
-        </div>
-        <span class="code-filename">main.dart</span>
-        <button class="copy-btn" onclick="copyCode(this, 'usage')">copy</button>
-      </div>
-      <div class="code-body" id="usage">
-<span class="kw">import</span> <span class="str">'package:ai_smart_translate/ai_smart_translate.dart'</span>;
-
-<span class="cm">// Translate text naturally</span>
-<span class="kw">final</span> result = <span class="kw">await</span> <span class="fn">AiSmartTranslate</span>.translate(
-  text: <span class="str">"Invite your friends"</span>,
-  targetLang: <span class="str">"hi"</span>,
-);
-
-<span class="cm">// Output: "अपने दोस्तों को इनवाइट करें" ✓</span>
-<span class="cm">// NOT:    "अपने मित्रों को आमंत्रित करें" ✗</span>
+    <div class="hero-avatar">
+      <div class="avatar-ring">
+        <div class="avatar-inner">V</div>
+        <div class="avatar-badge">FLUTTER</div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="features-section" id="features">
-    <div class="section-label">// WHY USE THIS</div>
-    <h2 class="section-title">Built different.</h2>
+  <div class="stats-row">
+    <div class="stat-item"><span class="stat-num">1+</span><span class="stat-label">PACKAGES</span></div>
+    <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">LANGUAGES</span></div>
+    <div class="stat-item"><span class="stat-num">AI</span><span class="stat-label">POWERED</span></div>
+    <div class="stat-item"><span class="stat-num">MIT</span><span class="stat-label">LICENSE</span></div>
+  </div>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">🧠</span>
-        <div class="feature-title">AI-Powered Natural Language</div>
-        <p class="feature-desc">Goes beyond word-for-word translation. Uses AI to produce translations that actually sound natural in context.</p>
+  <section class="section reveal" id="packages">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Packages</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="package-card">
+      <div class="pkg-top">
+        <div class="pkg-icon">🌍</div>
+        <div class="pkg-badges">
+          <span class="badge badge-green">pub.dev</span>
+          <span class="badge badge-yellow">v1.0.2</span>
+          <span class="badge badge-pink">AI Powered</span>
+        </div>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">⚡</span>
-        <div class="feature-title">Batch Translation</div>
-        <p class="feature-desc">Translate 100+ strings in a single API call. No more loops, no more rate limit headaches.</p>
+      <div class="pkg-name">ai_smart_translate</div>
+      <p class="pkg-desc">
+        A Flutter package combining Google Translate with AI-powered improvements —
+        delivering natural, context-aware translations. No more "आमंत्रित करना"
+        when you need "इनवाइट करें". Supports 100+ languages with auto-fallback.
+      </p>
+      <div class="pkg-features">
+        <span class="pkg-feature">100+ Languages</span>
+        <span class="pkg-feature">Batch Translation</span>
+        <span class="pkg-feature">Auto Fallback</span>
+        <span class="pkg-feature">Context-Aware</span>
+        <span class="pkg-feature">Free Tier</span>
+        <span class="pkg-feature">OpenRouter</span>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔄</span>
-        <div class="feature-title">Auto Fallback</div>
-        <p class="feature-desc">If one provider fails, automatically falls back to the next. Your app never breaks mid-translation.</p>
+      <div class="pkg-stats">
+        <div class="pkg-stat"><span>⭐</span><span>Open Source</span></div>
+        <div class="pkg-stat"><span>📦</span><span>Flutter & Dart</span></div>
+        <div class="pkg-stat"><span>🔗</span><span>pub.dev/packages/ai_smart_translate</span></div>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌍</span>
-        <div class="feature-title">100+ Languages</div>
-        <p class="feature-desc">Supports all major and minor languages. From Hindi to Swahili, your app speaks the world.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">💰</span>
-        <div class="feature-title">Free Tier Friendly</div>
-        <p class="feature-desc">Works with free API tiers. No surprise bills. Scale up only when you need to.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🎯</span>
-        <div class="feature-title">App-Context Aware</div>
-        <p class="feature-desc">Knows "Invite" should be "इनवाइट करें" not "आमंत्रित करना" in a mobile app.</p>
-      </div>
+    </a>
+
+    <div class="coming-soon">🚀 More packages coming soon...</div>
+  </section>
+
+  <section class="section reveal" id="skills">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-item"><span class="skill-emoji">🐦</span><span class="skill-name">Flutter</span></div>
+      <div class="skill-item"><span class="skill-emoji">🎯</span><span class="skill-name">Dart</span></div>
+      <div class="skill-item"><span class="skill-emoji">🤖</span><span class="skill-name">AI / ML</span></div>
+      <div class="skill-item"><span class="skill-emoji">🌍</span><span class="skill-name">Translation</span></div>
+      <div class="skill-item"><span class="skill-emoji">📦</span><span class="skill-name">pub.dev</span></div>
+      <div class="skill-item"><span class="skill-emoji">🐙</span><span class="skill-name">GitHub</span></div>
+      <div class="skill-item"><span class="skill-emoji">🔥</span><span class="skill-name">Firebase</span></div>
+      <div class="skill-item"><span class="skill-emoji">🌐</span><span class="skill-name">REST APIs</span></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-left">
-      Built by <span>vishalwork</span> · MIT License · 2026
+  <section class="section reveal" id="contact">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Connect</h2>
+      <div class="section-line"></div>
     </div>
-    <div class="footer-links">
-      <a href="https://pub.dev/packages/ai_smart_translate" target="_blank">pub.dev</a>
-      <a href="https://github.com/vishalwork/ai_smart_translate" target="_blank">GitHub</a>
-      <a href="https://github.com/vishalwork/ai_smart_translate/issues" target="_blank">Issues</a>
+    <div class="contact-grid">
+      <a href="https://github.com/vishalwork" target="_blank" class="contact-card">
+        <span class="contact-icon">🐙</span>
+        <div><div class="contact-label">GitHub</div><div class="contact-value">@vishalwork</div></div>
+      </a>
+      <a href="https://pub.dev/publishers/vishalwork" target="_blank" class="contact-card">
+        <span class="contact-icon">📦</span>
+        <div><div class="contact-label">pub.dev</div><div class="contact-value">vishalwork</div></div>
+      </a>
+      <a href="https://github.com/vishalwork/ai_smart_translate/issues" target="_blank" class="contact-card">
+        <span class="contact-icon">🐛</span>
+        <div><div class="contact-label">Issues / Support</div><div class="contact-value">GitHub Issues</div></div>
+      </a>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
+</div>
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx - 6 + 'px';
-      cursor.style.top = my - 6 + 'px';
-    });
+<footer>
+  <div class="container">
+    <p>Built with ❤️ by <span>KVishal</span> · Open Source · MIT License</p>
+  </div>
+</footer>
 
-    function animRing() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx - 18 + 'px';
-      ring.style.top = ry - 18 + 'px';
-      requestAnimationFrame(animRing);
-    }
-    animRing();
-
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(2.5)');
-      el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
-    });
-
-    // Copy code
-    function copyCode(btn, id) {
-      const el = document.getElementById(id);
-      const text = el.innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        btn.textContent = 'copied!';
-        btn.style.color = 'var(--accent)';
-        setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
-      });
-    }
-
-    // Scroll reveal
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.animation = 'fadeUp 0.7s ease both';
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.feature-card, .code-block, .stat').forEach(el => {
-      el.style.opacity = '0';
-      observer.observe(el);
-    });
-  </script>
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
