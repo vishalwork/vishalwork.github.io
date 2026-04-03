@@ -41,8 +41,9 @@
           from smart translation to AI-powered utilities.
         </p>
         <div class="hero-actions">
-          <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="btn btn-accent">↗ View on pub.dev</a>
-          <a href="https://github.com/vishalwork" target="_blank" class="btn btn-outline">⌥ GitHub Profile</a>
+          <a href="assets/Vishal_Kumar_Resume.pdf" download class="btn btn-accent">↓ Download Resume</a>
+          <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="btn btn-outline">↗ pub.dev</a>
+          <!-- <a href="https://github.com/vishalwork" target="_blank" class="btn btn-outline">⌥ GitHub</a> -->
           <a href="https://www.linkedin.com/in/kvishalwork21/" target="_blank" class="btn-outline">
             <img src="assets/icons/linkedin.svg" width="34" height="34" alt="LinkedIn"/>
           </a>
@@ -297,5 +298,25 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/typewriter.js"></script>
+  <script src="js/terminal.js"></script>
+  <script>
+    /* 3-D tilt on avatar */
+    const ring = document.querySelector('.avatar-ring');
+    if (ring) {
+      ring.addEventListener('mousemove', e => {
+        const r = ring.getBoundingClientRect();
+        const x = ((e.clientY - r.top)  / r.height - 0.5) * 22;
+        const y = ((e.clientX - r.left) / r.width  - 0.5) * -22;
+        ring.style.transform = `perspective(400px) rotateX(${x}deg) rotateY(${y}deg) scale(1.06)`;
+      });
+      ring.addEventListener('mouseleave', () => {
+        ring.style.transform = '';
+        ring.style.transition = 'transform 0.5s ease';
+      });
+      ring.addEventListener('mouseenter', () => { ring.style.transition = 'transform 0.1s ease'; });
+    }
+  </script>
 </body>
 </html>
