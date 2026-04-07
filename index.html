@@ -18,7 +18,7 @@
       <div class="nav-logo">KVishal</div>
       <div class="nav-links">
         <a href="#experience">Experience</a>
-        <a href="#packages">Packages</a>
+        <a href="#open-source">Open Source</a>
         <a href="#skills">Skills</a>
         <a href="#education">Education</a>
         <a href="#contact">Contact</a>
@@ -43,7 +43,6 @@
         <div class="hero-actions">
           <a href="assets/Vishal_Kumar_Resume.pdf" download class="btn btn-accent">↓ Download Resume</a>
           <a href="https://pub.dev/packages/ai_smart_translate" target="_blank" class="btn btn-outline">↗ pub.dev</a>
-          <!-- <a href="https://github.com/vishalwork" target="_blank" class="btn btn-outline">⌥ GitHub</a> -->
           <a href="https://www.linkedin.com/in/kvishalwork21/" target="_blank" class="btn-outline">
             <img src="assets/icons/linkedin.svg" width="34" height="34" alt="LinkedIn"/>
           </a>
@@ -61,7 +60,7 @@
     <div class="stats-row">
       <div class="stat-item"><span class="stat-num">3+</span><span class="stat-label">YEARS EXP.</span></div>
       <div class="stat-item"><span class="stat-num">15+</span><span class="stat-label">APPS BUILT</span></div>
-      <div class="stat-item"><span class="stat-num">1+</span><span class="stat-label">PACKAGES</span></div>
+      <div class="stat-item"><span class="stat-num">2+</span><span class="stat-label">OPEN SOURCE</span></div>
       <div class="stat-item"><span class="stat-num">MIT</span><span class="stat-label">LICENSE</span></div>
     </div>
 
@@ -75,9 +74,8 @@
 
       <div class="timeline">
 
-        <!-- Shanvia -->
         <div class="timeline-item">
-          <div class="tl-left">
+          <div class="tl-left" data-from="2025-01" data-to="present">
             <div class="tl-date">Jan 2025<br/>Present</div>
             <div class="tl-badge">CURRENT</div>
           </div>
@@ -98,9 +96,8 @@
           </div>
         </div>
 
-        <!-- Provis -->
         <div class="timeline-item">
-          <div class="tl-left">
+          <div class="tl-left" data-from="2024-09" data-to="2024-11">
             <div class="tl-date">Sept 2024<br/>Nov 2024</div>
           </div>
           <div class="tl-right">
@@ -120,9 +117,8 @@
           </div>
         </div>
 
-        <!-- Nellsys -->
         <div class="timeline-item">
-          <div class="tl-left">
+          <div class="tl-left" data-from="2023-07" data-to="2024-07">
             <div class="tl-date">July 2023<br/>July 2024</div>
           </div>
           <div class="tl-right">
@@ -139,9 +135,8 @@
           </div>
         </div>
 
-        <!-- Raneso -->
         <div class="timeline-item">
-          <div class="tl-left">
+          <div class="tl-left" data-from="2022-03" data-to="2023-06">
             <div class="tl-date">March 2022<br/>June 2023</div>
           </div>
           <div class="tl-right">
@@ -161,15 +156,15 @@
       </div>
     </section>
 
-    <!-- ── PACKAGES ── -->
-    <section class="section reveal" id="packages">
+    <!-- ── OPEN SOURCE ── -->
+    <section class="section reveal" id="open-source">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2 class="section-title">Packages</h2>
+        <h2 class="section-title">Open Source</h2>
         <div class="section-line"></div>
       </div>
 
-      <div class="package-card" onclick="window.open('https://vishalwork.is-a.dev/ai_smart_translate/','_blank')" style="cursor:pointer;">
+      <div class="package-card" onclick="window.open('https://vishalwork.is-a.dev/ai_smart_translate/','_blank')" style="cursor:pointer; margin-bottom:16px;">
         <div class="pkg-top">
           <div class="pkg-icon">🌍</div>
           <div class="pkg-badges">
@@ -199,7 +194,7 @@
           </div>
           <div class="pkg-stat">
             <span>📦</span>
-            <span><a class="pkg-stat-link" href="https://docs.flutter.dev/" target="_blank" onclick="event.stopPropagation()">Flutter & Dart</a></span>
+            <span><a class="pkg-stat-link" href="https://docs.flutter.dev/" target="_blank" onclick="event.stopPropagation()">Flutter &amp; Dart</a></span>
           </div>
           <div class="pkg-stat">
             <span>🔗</span>
@@ -208,7 +203,45 @@
         </div>
       </div>
 
-      <div class="coming-soon">🚀 More packages coming soon...</div>
+      <div class="package-card" onclick="window.open('https://github.com/vishalwork/sispack','_blank')" style="cursor:pointer;">
+        <div class="pkg-top">
+          <div class="pkg-icon">💾</div>
+          <div class="pkg-badges">
+            <span class="badge badge-blue">CLI Tool</span>
+            <span class="badge badge-yellow">v1.2</span>
+            <span class="badge badge-green">Homebrew</span>
+          </div>
+        </div>
+        <div class="pkg-name">sispack</div>
+        <p class="pkg-desc">
+          A lightweight, cross-platform Bash tool that analyzes and tracks disk usage of installed packages.
+          Identify what's eating your storage across Debian, Fedora, Arch Linux, and macOS —
+          with Homebrew support via a dedicated tap.
+        </p>
+        <div class="pkg-features">
+          <span class="pkg-feature">Cross-Platform</span>
+          <span class="pkg-feature">Size Analysis</span>
+          <span class="pkg-feature">Sort &amp; Filter</span>
+          <span class="pkg-feature">dpkg / rpm / pacman</span>
+          <span class="pkg-feature">Homebrew</span>
+          <span class="pkg-feature">MIT</span>
+        </div>
+        <div class="pkg-stats">
+          <div class="pkg-stat">
+            <span>🐚</span>
+            <span><a class="pkg-stat-link" href="https://github.com/vishalwork/sispack" target="_blank" onclick="event.stopPropagation()">Shell / Bash</a></span>
+          </div>
+          <div class="pkg-stat">
+            <span>🍺</span>
+            <span><a class="pkg-stat-link" href="https://github.com/vishalwork/homebrew-sispack" target="_blank" onclick="event.stopPropagation()">Homebrew Tap</a></span>
+          </div>
+          <div class="pkg-stat">
+            <span>🔗</span>
+            <span><a class="pkg-stat-link" href="https://github.com/vishalwork/sispack" target="_blank" onclick="event.stopPropagation()">github.com/vishalwork/sispack</a></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ── SKILLS ── -->
@@ -274,7 +307,7 @@
           <span class="contact-icon">🐙</span>
           <div><div class="contact-label">GitHub</div><div class="contact-value">@vishalwork</div></div>
         </a>
-        <a href="https://pub.dev/publishers/vishalwork" target="_blank" class="contact-card">
+        <a href="https://pub.dev/publishers/vishalwork.is-a.dev/packages" target="_blank" class="contact-card">
           <span class="contact-icon">📦</span>
           <div><div class="contact-label">pub.dev</div><div class="contact-value">vishalwork</div></div>
         </a>
@@ -302,9 +335,9 @@
   <script src="js/typewriter.js"></script>
   <script src="js/terminal.js"></script>
   <script>
-    /* 3-D tilt on avatar */
     const ring = document.querySelector('.avatar-ring');
     if (ring) {
+      ring.addEventListener('mouseenter', () => { ring.style.transition = 'transform 0.1s ease'; });
       ring.addEventListener('mousemove', e => {
         const r = ring.getBoundingClientRect();
         const x = ((e.clientY - r.top)  / r.height - 0.5) * 22;
@@ -315,8 +348,8 @@
         ring.style.transform = '';
         ring.style.transition = 'transform 0.5s ease';
       });
-      ring.addEventListener('mouseenter', () => { ring.style.transition = 'transform 0.1s ease'; });
     }
   </script>
+
 </body>
 </html>

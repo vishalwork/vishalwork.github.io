@@ -217,6 +217,7 @@ nav {
 .badge-green  { background: rgba(100,255,218,0.1); color: var(--accent);  border: 1px solid rgba(100,255,218,0.2); }
 .badge-pink   { background: rgba(255,101,132,0.1); color: var(--accent2); border: 1px solid rgba(255,101,132,0.2); }
 .badge-yellow { background: rgba(255,209,102,0.1); color: var(--accent3); border: 1px solid rgba(255,209,102,0.2); }
+.badge-blue   { background: rgba(100,180,255,0.1); color: #64b4ff;        border: 1px solid rgba(100,180,255,0.2); }
 
 .pkg-name { font-family: 'Clash Display', sans-serif; font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
 .pkg-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
@@ -315,6 +316,12 @@ nav {
   background: rgba(100,255,218,0.08);
   color: var(--accent);
   border: 1px solid rgba(100,255,218,0.2);
+}
+
+.tl-duration {
+  margin-top: 6px;
+  font-size: 0.65rem; color: var(--muted);
+  letter-spacing: 0.04em;
 }
 
 .tl-right { padding-left: 32px; }
