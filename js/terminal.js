@@ -43,7 +43,7 @@
 
     experience: () => [
       '<span class="t-comment">$ git log --oneline --jobs</span>',
-      '<span class="t-hash">a3f1c9e</span> <span class="t-str">Jan 2025 → now</span>  Shanvia Tech — Sr. Flutter Dev',
+      '<span class="t-hash">a3f1c9e</span> <span class="t-str">Jan 2025 → Apr 2026</span>  Shanvia Tech — Sr. Flutter Dev',
       '<span class="t-hash">b82de01</span> <span class="t-str">Sep–Nov 2024</span>  Provis Tech — Flutter Dev',
       '<span class="t-hash">c91ab44</span> <span class="t-str">Jul 2023–2024</span> Nellsys — Mobile Dev',
       '<span class="t-hash">d04ff72</span> <span class="t-str">Mar 2022–2023</span> Raneso Global — Software Dev',
