@@ -80,7 +80,7 @@
   styleEl.textContent = `
     #vk-terminal {
       position: fixed; bottom: 32px; right: 32px;
-      width: 520px; max-height: 380px;
+      width: min(520px, calc(100vw - 24px)); max-height: 380px;
       background: rgba(8,8,14,0.97);
       border: 1px solid rgba(100,255,218,0.25);
       border-radius: 10px;
@@ -153,6 +153,26 @@
       letter-spacing: 0.1em; pointer-events: none;
       z-index: 9998; transition: opacity 0.4s;
     }
+    #vk-mob-btn {
+      display: none;
+      position: fixed; bottom: 24px; right: 24px;
+      width: 46px; height: 46px; border-radius: 14px;
+      background: rgba(8,8,14,0.95);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: #64ffda; font-family: 'Courier New', monospace;
+      font-size: 14px; font-weight: 700;
+      align-items: center; justify-content: center;
+      cursor: pointer; z-index: 9998;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #vk-mob-btn:active { transform: scale(0.92); }
+    @media (max-width: 680px) {
+      #vk-hint    { display: none !important; }
+      #vk-mob-btn { display: flex; }
+      #vk-terminal { bottom: 12px; right: 12px; left: 12px; width: auto; max-height: 60vh; }
+    }
   `;
   document.head.appendChild(styleEl);
 
@@ -161,6 +181,12 @@
   hint.id = 'vk-hint';
   hint.textContent = 'press ` to open terminal';
   document.body.appendChild(hint);
+
+  const mobBtn = document.createElement('button');
+  mobBtn.id = 'vk-mob-btn';
+  mobBtn.setAttribute('aria-label', 'Open terminal');
+  mobBtn.textContent = '>_';
+  document.body.appendChild(mobBtn);
 
   const term = document.createElement('div');
   term.id = 'vk-terminal';
@@ -199,7 +225,8 @@
   function open(auto) {
     term.classList.add('open');
     hint.style.opacity = '0';
-    // trigger transition on next tick
+    mobBtn.style.opacity = '0';
+    mobBtn.style.pointerEvents = 'none';
     requestAnimationFrame(() => {
       requestAnimationFrame(() => term.classList.add('visible'));
     });
@@ -218,6 +245,8 @@
     term.classList.remove('visible');
     setTimeout(() => term.classList.remove('open'), 250);
     hint.style.opacity = '1';
+    mobBtn.style.opacity = '1';
+    mobBtn.style.pointerEvents = 'auto';
   }
 
   /* ── Events ── */
@@ -226,6 +255,7 @@
   // click anywhere in terminal body → refocus input
   body.addEventListener('click', () => input.focus());
   term.addEventListener('click', () => input.focus());
+  mobBtn.addEventListener('click', () => open(false));
 
   input.addEventListener('keydown', e => {
     e.stopPropagation(); // don't let global handler steal keys
@@ -259,14 +289,15 @@
     if (e.key === 'Escape' && term.classList.contains('open')) close();
   });
 
-  /* ── Auto-open on load ── */
-  setTimeout(() => {
-    open(true);
-    // auto-close after 6s if user hasn't typed anything
-    const autoClose = setTimeout(() => {
-      if (input.value === '' && body.children.length <= 3) close();
-    }, 6000);
-    input.addEventListener('keydown', () => clearTimeout(autoClose), { once: true });
-  }, 2000);
+  /* ── Auto-open on load (desktop only) ── */
+  if (!('ontouchstart' in window) && window.innerWidth > 680) {
+    setTimeout(() => {
+      open(true);
+      const autoClose = setTimeout(() => {
+        if (input.value === '' && body.children.length <= 3) close();
+      }, 6000);
+      input.addEventListener('keydown', () => clearTimeout(autoClose), { once: true });
+    }, 2000);
+  }
 
 })();

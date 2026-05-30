@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vishal — Flutter Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/style.css"/>
 </head>
@@ -53,6 +55,11 @@
           <div class="avatar-inner">V</div>
           <div class="avatar-badge">FLUTTER</div>
         </div>
+        <button class="freelance-badge" id="fl-badge" aria-label="Open freelance details">
+          <span class="fl-dot"></span>
+          Open for Freelance
+          <span class="fl-arrow">↗</span>
+        </button>
       </div>
     </section>
 
@@ -330,25 +337,94 @@
     </div>
   </footer>
 
+  <!-- ── FREELANCE MODAL ── -->
+  <div class="fl-backdrop" id="fl-backdrop" role="dialog" aria-modal="true" aria-label="Freelance details">
+    <div class="fl-modal" id="fl-modal">
+      <button class="fl-modal-close" id="fl-close" aria-label="Close">✕</button>
+
+      <div class="fl-modal-top">
+        <div class="fl-modal-status"><span class="fl-dot"></span> Available · Immediate</div>
+        <h2 class="fl-modal-title">Let's Build Something</h2>
+        <p class="fl-modal-sub">Open to freelance projects, contracts &amp; collaborations — Flutter first, but not limited to it.</p>
+      </div>
+
+      <div class="fl-services">
+        <div class="fl-service"><span>📱</span> Flutter App Development</div>
+        <div class="fl-service"><span>📦</span> Dart Package Creation</div>
+        <div class="fl-service"><span>🔥</span> Firebase &amp; Supabase Backend</div>
+        <div class="fl-service"><span>🎞️</span> WebRTC &amp; Real-time Features</div>
+        <div class="fl-service"><span>🚀</span> App Store &amp; Play Store Deploy</div>
+        <div class="fl-service"><span>🤖</span> AI Integration in Flutter</div>
+      </div>
+
+      <div class="fl-meta-row">
+        <div class="fl-meta-item">
+          <span class="fl-meta-label">TIMELINE</span>
+          <span class="fl-meta-val">2 – 6 weeks</span>
+        </div>
+        <div class="fl-meta-sep"></div>
+        <div class="fl-meta-item">
+          <span class="fl-meta-label">BEST FOR</span>
+          <span class="fl-meta-val">Startups · MVPs</span>
+        </div>
+        <div class="fl-meta-sep"></div>
+        <div class="fl-meta-item">
+          <span class="fl-meta-label">EXPERIENCE</span>
+          <span class="fl-meta-val">3+ years</span>
+        </div>
+      </div>
+
+      <a href="mailto:kvishalwork21@gmail.com" class="fl-cta">
+        ✉&nbsp; kvishalwork21@gmail.com
+      </a>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
   <script src="js/particles.js"></script>
   <script src="js/typewriter.js"></script>
   <script src="js/terminal.js"></script>
   <script>
+    /* ── avatar tilt ── */
     const ring = document.querySelector('.avatar-ring');
     if (ring) {
-      ring.addEventListener('mouseenter', () => { ring.style.transition = 'transform 0.1s ease'; });
+      let rafId = null;
+      ring.style.transition = 'transform 0.15s ease';
       ring.addEventListener('mousemove', e => {
-        const r = ring.getBoundingClientRect();
-        const x = ((e.clientY - r.top)  / r.height - 0.5) * 22;
-        const y = ((e.clientX - r.left) / r.width  - 0.5) * -22;
-        ring.style.transform = `perspective(400px) rotateX(${x}deg) rotateY(${y}deg) scale(1.06)`;
-      });
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          const r = ring.getBoundingClientRect();
+          const x = ((e.clientY - r.top)  / r.height - 0.5) * 20;
+          const y = ((e.clientX - r.left) / r.width  - 0.5) * -20;
+          ring.style.transform = `perspective(400px) rotateX(${x}deg) rotateY(${y}deg) scale(1.05)`;
+        });
+      }, { passive: true });
       ring.addEventListener('mouseleave', () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        ring.style.transition = 'transform 0.45s ease';
         ring.style.transform = '';
-        ring.style.transition = 'transform 0.5s ease';
-      });
+        setTimeout(() => { ring.style.transition = 'transform 0.15s ease'; }, 450);
+      }, { passive: true });
     }
+
+    /* ── freelance modal ── */
+    const flBadge    = document.getElementById('fl-badge');
+    const flBackdrop = document.getElementById('fl-backdrop');
+    const flClose    = document.getElementById('fl-close');
+
+    function openModal() {
+      flBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      flBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    flBadge.addEventListener('click', openModal);
+    flClose.addEventListener('click', closeModal);
+    flBackdrop.addEventListener('click', e => { if (e.target === flBackdrop) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   </script>
 
 </body>
