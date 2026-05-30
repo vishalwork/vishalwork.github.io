@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="gl" cx="15%" cy="25%" r="55%">
+      <stop offset="0%" stop-color="#64ffda" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#64ffda" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gr" cx="85%" cy="75%" r="50%">
+      <stop offset="0%" stop-color="#ff6584" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#ff6584" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#64ffda"/>
+      <stop offset="100%" stop-color="#ff6584"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0a0f"/>
+  <rect width="1200" height="630" fill="url(#gl)"/>
+  <rect width="1200" height="630" fill="url(#gr)"/>
+
+  <!-- Dot grid (subtle) -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="20" cy="20" r="1" fill="#ffffff" opacity="0.04"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Outer border -->
+  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none" stroke="#64ffda" stroke-width="1" opacity="0.12"/>
+
+  <!-- Avatar ring -->
+  <circle cx="200" cy="315" r="96" fill="none" stroke="url(#ring-grad)" stroke-width="3"/>
+  <circle cx="200" cy="315" r="92" fill="#111118"/>
+  <text x="200" y="350" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="80" font-weight="700" fill="#64ffda">V</text>
+
+  <!-- Availability badge -->
+  <rect x="130" y="424" width="142" height="28" rx="14" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.3" stroke-width="1"/>
+  <circle cx="150" cy="438" r="5" fill="#64ffda"/>
+  <text x="200" y="443" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#64ffda" font-weight="700" letter-spacing="1">AVAILABLE</text>
+
+  <!-- Name -->
+  <text x="340" y="280" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700" fill="#e8eaf6" letter-spacing="-1">Vishal Kumar</text>
+
+  <!-- Role -->
+  <text x="342" y="334" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#5c6080" font-weight="400">Sr. Flutter Developer · Open Source Author</text>
+
+  <!-- Divider line -->
+  <rect x="342" y="358" width="760" height="1" fill="#ffffff" opacity="0.07"/>
+
+  <!-- Skill tags -->
+  <rect x="342" y="376" width="100" height="30" rx="15" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="392" y="396" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#64ffda" font-weight="600">Flutter</text>
+
+  <rect x="454" y="376" width="82" height="30" rx="15" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="495" y="396" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#64ffda" font-weight="600">Dart</text>
+
+  <rect x="548" y="376" width="132" height="30" rx="15" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="614" y="396" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#64ffda" font-weight="600">Open Source</text>
+
+  <rect x="692" y="376" width="104" height="30" rx="15" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="744" y="396" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#64ffda" font-weight="600">Firebase</text>
+
+  <rect x="808" y="376" width="96" height="30" rx="15" fill="#64ffda" fill-opacity="0.08" stroke="#64ffda" stroke-opacity="0.25" stroke-width="1"/>
+  <text x="856" y="396" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#64ffda" font-weight="600">WebRTC</text>
+
+  <!-- Stats row -->
+  <text x="342" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#64ffda" font-weight="700">3+</text>
+  <text x="370" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#5c6080">Years Exp.</text>
+
+  <text x="480" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#64ffda" font-weight="700">15+</text>
+  <text x="510" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#5c6080">Apps Built</text>
+
+  <text x="620" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#64ffda" font-weight="700">2+</text>
+  <text x="646" y="460" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#5c6080">OSS Packages</text>
+
+  <!-- Website URL -->
+  <text x="342" y="546" font-family="'Courier New', Courier, monospace" font-size="16" fill="#64ffda" opacity="0.4">vishalwork.github.io</text>
+</svg>
